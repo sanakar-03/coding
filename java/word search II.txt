@@ -1,0 +1,62 @@
+class Solution {
+     Set<String> result;
+    char[][] brd;
+    int m, n;
+    Node root;
+     private class Node {
+        Node[] children = new Node[26];
+        boolean isEndOfWord = false;
+        int wordLen;
+    }
+    public List<String> findWords(char[][] board, String[] words) {
+        root = new Node();
+        m = board.length;
+        n = board[0].length;
+        brd = board;
+        result = new HashSet<>();
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            buildTree(word);
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                dfs(root, i, j, sb);
+            }
+        }
+        return new ArrayList<>(result);
+    }
+    private void buildTree(String word) {
+        root = buildTree(root, word, 0);
+    }
+
+    private Node buildTree(Node x, String word, int d) {
+        if (x == null) x = new Node();
+        if (d == word.length()) {
+            x.isEndOfWord = true;
+            x.wordLen = d;
+            return x;
+        }
+        char c = word.charAt(d);
+        x.children[c - 'a'] = buildTree(x.children[c - 'a'], word, d + 1);
+        return x;
+    }
+
+    private void dfs(Node x, int row, int col, StringBuilder str) {
+        if (0 <= row && row < m && 0 <= col && col < n) {
+            char c = brd[row][col];
+            if (c != '#' && x.children[c - 'a'] != null) {
+                brd[row][col] = '#';
+                str.append(c);
+                if (x.children[c - 'a'].isEndOfWord &&  x.children[c - 'a'].wordLen == str.length()) {
+                    result.add(str.toString());
+                }
+                dfs(x.children[c - 'a'], row - 1, col, str);
+                dfs(x.children[c - 'a'], row, col - 1, str);
+                dfs(x.children[c - 'a'], row, col + 1, str);
+                dfs(x.children[c - 'a'], row + 1, col, str);
+                brd[row][col] = c;
+                str.deleteCharAt(str.length() - 1);
+            }
+        }
+    }
+}

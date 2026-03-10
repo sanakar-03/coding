@@ -1,0 +1,33 @@
+import java.util.Scanner;
+
+public class Solution {
+
+    public static void main(String[] args) {
+            Scanner sc=new Scanner(System.in);
+            System.out.println("================================");
+            for(int i=0;i<3;i++)
+            {
+                String s1=sc.next();
+                int x=sc.nextInt();
+                for(int j=s1.length();j<15;++j){
+                    s1+=" ";
+                }
+                int digitCount=0,temp=x, numberOfZerosToAdd=0;
+                while(temp !=0){
+                    temp/=10;
+                    digitCount++;
+                    
+                }
+                if(x==0)digitCount=1;
+                System.out.print(s1);
+                numberOfZerosToAdd = 3 - digitCount;
+                for(int j=0;j<numberOfZerosToAdd;++j){
+                    System.out.print(0);
+                }
+                System.out.print(x);
+                System.out.println();
+            }
+            System.out.println("================================");
+
+    }
+}
